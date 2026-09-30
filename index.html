@@ -1,0 +1,955 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>[hidden]{display:none!important}body{margin:0}</style>
+<title>Ofício Barbearia</title>
+<meta name="description" content="Ofício Barbearia — degradê, navalhado, barba na toalha quente e hora marcada em Santo André. Projeto de portfólio de Matheus Gomes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap">
+<style>
+/* Layout: a barbershop wall read top to bottom — street-sign headline beside a turning pole, a price board,
+   a "comanda" that builds your visit, the cuts wall, the club, the team, then hours and the street. */
+:root{
+  --couro:#101a16;      /* deep green leather of the chair */
+  --couro-2:#16241e;
+  --couro-3:#1e3129;
+  --linha:#2a4037;
+  --latao:#cfa65a;      /* brass fittings */
+  --latao-claro:#ecd08f;
+  --marfim:#f2eadb;     /* towel ivory */
+  --nevoa:#a2b0a6;      /* green-biased grey */
+  --vermelho:#b8372c;   /* pole red */
+  --azul:#2f4f8f;       /* pole blue */
+  --verde-ok:#7fcf95;
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --gutter:clamp(16px,4vw,40px);
+  --radius:14px;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--couro)}
+body{
+  background:var(--couro);color:var(--marfim);
+  font-family:var(--f-body);font-size:17px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:clip;
+}
+body::after{ /* film grain */
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:90;opacity:.07;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+a{color:inherit}
+img,svg{max-width:100%}
+:focus-visible{outline:2px solid var(--latao-claro);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:var(--gutter)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- type ---------- */
+h1,h2,h3{margin:0;text-wrap:balance}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:.6em;margin:0 0 14px;
+  font-size:.78rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--latao);
+}
+.eyebrow svg{width:22px;height:10px;flex:none}
+.h2{
+  font-family:var(--f-display);font-weight:800;text-transform:uppercase;
+  font-size:clamp(2.5rem,5.4vw,4.4rem);line-height:.92;letter-spacing:.005em;
+}
+.h2 em,.h1 em{font-family:var(--f-serif);font-style:italic;font-weight:400;text-transform:none;color:var(--latao-claro);letter-spacing:0}
+.lead{color:var(--nevoa);max-width:58ch;margin:18px 0 0;font-size:1.05rem}
+.section{padding-block:clamp(64px,8vw,104px)}
+.section-head{display:grid;grid-template-columns:1fr auto;align-items:end;gap:24px 40px;margin-bottom:clamp(36px,5vw,56px)}
+.section-head > *{min-width:0}
+@media (max-width:760px){.section-head{grid-template-columns:1fr}}
+
+/* ---------- buttons ---------- */
+.btn{
+  --b:var(--latao);
+  display:inline-flex;align-items:center;justify-content:center;gap:.55em;
+  padding:.9em 1.4em;border-radius:999px;border:1px solid var(--b);
+  font:600 .98rem/1 var(--f-body);text-decoration:none;cursor:pointer;
+  background:var(--b);color:var(--couro);
+  transition:transform .25s cubic-bezier(.2,.8,.2,1),background .25s,color .25s,box-shadow .25s;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px -10px color-mix(in srgb,var(--latao) 70%,transparent)}
+.btn:active{transform:translateY(0)}
+.btn.ghost{background:transparent;color:var(--marfim);border-color:var(--linha)}
+.btn.ghost:hover{border-color:var(--latao);color:var(--latao-claro);box-shadow:none}
+.btn svg{width:18px;height:18px;flex:none}
+
+/* ---------- progress + header ---------- */
+.progress{position:fixed;top:0;left:0;height:2px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:var(--latao);z-index:80}
+.top{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:60;
+  background:color-mix(in srgb,var(--couro) 78%,transparent);
+  backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);
+  border-bottom:1px solid transparent;transition:border-color .3s,background .3s;
+}
+.top.scrolled{border-bottom-color:var(--linha);background:color-mix(in srgb,var(--couro) 92%,transparent)}
+.top .wrap{display:flex;align-items:center;gap:24px;height:72px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;margin-right:auto}
+.logo svg{width:34px;height:34px;flex:none}
+.logo b{font-family:var(--f-display);font-weight:900;font-size:1.6rem;letter-spacing:.14em;line-height:1}
+.logo i{font-family:var(--f-serif);font-size:1rem;color:var(--latao);display:block;line-height:1;margin-top:2px;letter-spacing:.02em}
+.nav{display:flex;gap:26px}
+.nav a{text-decoration:none;font-size:.95rem;color:var(--nevoa);position:relative;padding-block:6px;transition:color .2s}
+.nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--latao);transform:scaleX(0);transform-origin:right;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.nav a:hover{color:var(--marfim)}
+.nav a:hover::after{transform:scaleX(1);transform-origin:left}
+.menu-btn{display:none;background:none;border:1px solid var(--linha);color:var(--marfim);width:44px;height:44px;border-radius:12px;cursor:pointer}
+.menu-btn span{display:block;width:18px;height:1.5px;background:currentColor;margin:4px auto;transition:transform .3s,opacity .3s}
+.menu-btn[aria-expanded="true"] span:nth-child(1){transform:translateY(5.5px) rotate(45deg)}
+.menu-btn[aria-expanded="true"] span:nth-child(2){opacity:0}
+.menu-btn[aria-expanded="true"] span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg)}
+.mobile-nav{display:none}
+@media (max-width:900px){
+  .nav,.top .wrap > .btn{display:none}
+  .menu-btn{display:block}
+  .mobile-nav{display:grid;gap:4px;padding:8px var(--gutter) 20px;border-top:1px solid var(--linha)}
+  .mobile-nav a{padding:12px 0;text-decoration:none;font-family:var(--f-display);font-weight:800;font-size:1.6rem;text-transform:uppercase;border-bottom:1px solid var(--linha)}
+  .mobile-nav .btn{margin-top:14px;font-family:var(--f-body);font-size:1rem;text-transform:none;border-bottom:1px solid var(--b)}
+}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow-x:clip;padding-block:clamp(40px,7vw,88px) clamp(56px,8vw,96px)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:clamp(32px,5vw,72px);align-items:center}
+.hero-copy{min-width:0}
+.kicker{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:0 0 22px;color:var(--nevoa);font-size:.9rem}
+.status{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid var(--linha);border-radius:999px;background:var(--couro-2);color:var(--marfim);font-weight:600;font-size:.85rem}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--nevoa);flex:none}
+.status.open .dot{background:var(--verde-ok);box-shadow:0 0 0 0 color-mix(in srgb,var(--verde-ok) 60%,transparent);animation:ping 2s infinite}
+@keyframes ping{70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.h1{
+  font-family:var(--f-display);font-weight:900;text-transform:uppercase;
+  font-size:clamp(3.6rem,10vw,8.4rem);line-height:.84;letter-spacing:-.005em;
+}
+.h1 .line{display:block;overflow:hidden;padding-bottom:.04em}
+.h1 .line > span{display:inline-block;animation:rise 1s cubic-bezier(.2,.8,.2,1) both}
+.h1 .line:nth-child(2) > span{animation-delay:.12s}
+.h1 .line:nth-child(3) > span{animation-delay:.24s}
+.h1 em{font-size:.62em;line-height:1;display:inline-block;padding-top:.12em}
+@keyframes rise{from{transform:translateY(105%)}to{transform:none}}
+.hero p.lead{animation:fade .9s .45s both}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;animation:fade .9s .55s both}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin:44px 0 0;padding:0;border-top:1px solid var(--linha);animation:fade .9s .65s both}
+.facts div{padding:16px 16px 0 0;min-width:0}
+.facts div + div{padding-left:16px;border-left:1px solid var(--linha)}
+.facts dt{font-family:var(--f-display);font-weight:800;font-size:1.5rem;text-transform:uppercase;line-height:1.05}
+.facts dd{margin:4px 0 0;color:var(--nevoa);font-size:.88rem;line-height:1.35}
+
+.pole-stage{position:relative;height:clamp(380px,48vw,560px);display:grid;place-items:center;min-width:0}
+.ring{position:absolute;width:min(92%,420px);aspect-ratio:1;max-width:100%;animation:spin 38s linear infinite;opacity:.9}
+.ring text{font:700 11.5px var(--f-body);letter-spacing:.34em;fill:var(--latao);text-transform:uppercase}
+@keyframes spin{to{transform:rotate(1turn)}}
+.pole{position:relative;width:clamp(96px,11vw,128px);height:88%;display:flex;flex-direction:column;align-items:center;filter:drop-shadow(0 30px 40px rgba(0,0,0,.55))}
+.cap{width:118%;height:34px;border-radius:12px 12px 6px 6px;flex:none;
+  background:linear-gradient(90deg,#6f5426,var(--latao-claro) 38%,#fff3c9 46%,var(--latao) 60%,#5d4520);}
+.cap.bottom{border-radius:6px 6px 12px 12px}
+.cap::before{content:"";display:block;width:34%;height:14px;margin:-14px auto 0;border-radius:50% 50% 0 0;background:inherit}
+.cap.bottom::before{display:none}
+.cap.bottom::after{content:"";display:block;width:40%;height:12px;margin:34px auto 0;border-radius:0 0 50% 50%;background:inherit}
+.tube{position:relative;flex:1;width:100%;overflow:hidden;border-radius:4px;background:var(--marfim)}
+.stripes{position:absolute;left:-30%;right:-30%;top:-176px;bottom:-176px;animation:turn 1.6s linear infinite}
+.stripes i{position:absolute;inset:0;transform:skewY(-28deg);
+  background:repeating-linear-gradient(180deg,var(--vermelho) 0 22px,var(--marfim) 22px 44px,var(--azul) 44px 66px,var(--marfim) 66px 88px)}
+@keyframes turn{to{transform:translateY(88px)}}
+.tube::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(0,0,0,.55),rgba(0,0,0,.05) 26%,rgba(255,255,255,.45) 40%,rgba(255,255,255,0) 54%,rgba(0,0,0,.18) 72%,rgba(0,0,0,.6))}
+.chip{
+  position:absolute;display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;
+  background:color-mix(in srgb,var(--couro-2) 88%,transparent);border:1px solid var(--linha);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  font-size:.85rem;line-height:1.25;box-shadow:0 18px 40px -20px rgba(0,0,0,.8);
+  animation:float 6s ease-in-out infinite;
+}
+.chip b{display:block;font-family:var(--f-display);font-weight:800;font-size:1.25rem;letter-spacing:.02em}
+.chip small{color:var(--nevoa)}
+.chip.a{left:0;top:16%}
+.chip.b{right:0;bottom:14%;animation-delay:-3s}
+.chip svg{width:26px;height:26px;flex:none;color:var(--latao)}
+@keyframes float{50%{transform:translateY(-10px)}}
+@media (max-width:900px){
+  .hero .wrap{grid-template-columns:1fr}
+  .pole-stage{height:380px}
+}
+@media (max-width:520px){
+  .facts{grid-template-columns:1fr}
+  .facts div + div{padding-left:0;border-left:0;border-top:1px solid var(--linha);margin-top:14px}
+  .facts div{padding:14px 0 0}
+  .chip.a{left:-4px;top:8%}
+  .chip.b{right:-4px}
+}
+
+/* ---------- ticker ---------- */
+.ticker-clip{overflow:hidden;padding-block:14px}
+.ticker{background:var(--latao);color:var(--couro);overflow:hidden;border-block:1px solid var(--latao-claro);transform:rotate(-1.2deg);margin-inline:-20px}
+.ticker-track{display:flex;width:max-content;animation:slide 32s linear infinite}
+.ticker ul{display:flex;align-items:center;gap:30px;margin:0;padding:14px 15px;list-style:none}
+.ticker li{font-family:var(--f-display);font-weight:900;font-size:1.7rem;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap;display:flex;align-items:center;gap:30px}
+.ticker li::after{content:"";width:9px;height:9px;background:currentColor;transform:rotate(45deg)}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* ---------- price board ---------- */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;padding:5px;border:1px solid var(--linha);border-radius:999px;background:var(--couro-2);width:max-content;max-width:100%}
+.tab{border:0;background:none;color:var(--nevoa);font:600 .92rem var(--f-body);padding:.6em 1.1em;border-radius:999px;cursor:pointer;transition:color .2s,background .3s}
+.tab[aria-selected="true"]{background:var(--marfim);color:var(--couro)}
+.board{border-top:1px solid var(--linha)}
+.row{
+  display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:baseline;gap:6px 22px;
+  padding:22px 0;border-bottom:1px solid var(--linha);position:relative;
+  transition:padding .35s cubic-bezier(.2,.8,.2,1);
+}
+.row::before{content:"";position:absolute;inset:0 -14px;border-radius:12px;background:var(--couro-2);opacity:0;transition:opacity .3s;z-index:-1}
+.row:hover{padding-inline:14px}
+.row:hover::before{opacity:1}
+.row h3{font-family:var(--f-display);font-weight:800;font-size:clamp(1.5rem,2.6vw,2rem);text-transform:uppercase;line-height:1;letter-spacing:.01em}
+.row p{grid-column:1/-1;margin:0;color:var(--nevoa);font-size:.95rem;max-width:62ch}
+.row .min{color:var(--nevoa);font-size:.9rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.row .price{font-family:var(--f-display);font-weight:800;font-size:clamp(1.6rem,2.8vw,2.2rem);color:var(--latao-claro);font-variant-numeric:tabular-nums;white-space:nowrap}
+.row .price small{font-family:var(--f-body);font-weight:500;font-size:.8rem;color:var(--nevoa);margin-right:4px}
+.tag{display:inline-block;vertical-align:middle;margin-left:10px;padding:3px 8px;border-radius:6px;border:1px solid var(--latao);color:var(--latao);font:700 .66rem/1.2 var(--f-body);letter-spacing:.12em;text-transform:uppercase}
+.board-note{margin:18px 0 0;color:var(--nevoa);font-size:.88rem}
+
+/* ---------- combo / comanda ---------- */
+.combo{background:linear-gradient(180deg,var(--couro) 0,var(--couro-2) 18%,var(--couro-2) 82%,var(--couro) 100%)}
+.combo-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:clamp(28px,4vw,56px);align-items:start}
+.groups{display:grid;gap:30px;min-width:0}
+.group h3{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--latao);font-weight:700;margin-bottom:12px;display:flex;gap:10px;align-items:baseline}
+.group h3 span{color:var(--nevoa);letter-spacing:.04em;text-transform:none;font-weight:500}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.opt{position:relative;display:block;cursor:pointer}
+.opt input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.opt .box{
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;height:100%;
+  padding:14px 16px;border-radius:var(--radius);border:1px solid var(--linha);background:var(--couro);
+  transition:border-color .2s,background .25s,transform .25s cubic-bezier(.2,.8,.2,1);
+}
+.opt:hover .box{border-color:color-mix(in srgb,var(--latao) 50%,var(--linha));transform:translateY(-2px)}
+.check{width:22px;height:22px;border-radius:7px;border:1.5px solid var(--linha);display:grid;place-items:center;transition:background .2s,border-color .2s}
+.check svg{width:14px;height:14px;color:var(--couro);transform:scale(0);transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
+.opt .name{font-weight:600;line-height:1.25;min-width:0}
+.opt .name small{display:block;color:var(--nevoa);font-weight:400;font-size:.82rem;font-variant-numeric:tabular-nums}
+.opt .val{font-family:var(--f-display);font-weight:800;font-size:1.3rem;font-variant-numeric:tabular-nums;color:var(--latao-claro)}
+.opt input:checked + .box{border-color:var(--latao);background:color-mix(in srgb,var(--latao) 11%,var(--couro))}
+.opt input:checked + .box .check{background:var(--latao);border-color:var(--latao)}
+.opt input:checked + .box .check svg{transform:scale(1)}
+.opt input:focus-visible + .box{outline:2px solid var(--latao-claro);outline-offset:3px}
+
+.comanda{
+  position:sticky;top:96px;min-width:0;color:#1c1a15;
+  background:var(--marfim);border-radius:6px;padding:26px 24px 30px;
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.9);
+  -webkit-mask:radial-gradient(circle 7px at 50% 0,transparent 98%,#000) 0 0/22px 51% repeat-x,radial-gradient(circle 7px at 50% 100%,transparent 98%,#000) 0 100%/22px 51% repeat-x;
+          mask:radial-gradient(circle 7px at 50% 0,transparent 98%,#000) 0 0/22px 51% repeat-x,radial-gradient(circle 7px at 50% 100%,transparent 98%,#000) 0 100%/22px 51% repeat-x;
+  --ink:#1c1a15;--ink-2:#6b6557;--rule:#cfc5b1;
+}
+.comanda header{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1.5px dashed var(--rule);padding-bottom:12px;margin-bottom:12px}
+.comanda header b{font-family:var(--f-display);font-weight:900;font-size:1.6rem;letter-spacing:.12em;text-transform:uppercase}
+.comanda header span{font-size:.78rem;color:var(--ink-2);font-variant-numeric:tabular-nums;letter-spacing:.06em}
+.lines{list-style:none;margin:0;padding:0;min-height:60px}
+.lines li{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:.95rem;animation:ink .35s both}
+.lines li span:last-child{font-variant-numeric:tabular-nums;white-space:nowrap}
+.lines li.disc{color:#2f6b3f}
+.lines .empty{color:var(--ink-2);font-style:italic}
+@keyframes ink{from{opacity:0;transform:translateX(-6px)}}
+.sum{border-top:1.5px dashed var(--rule);margin-top:10px;padding-top:14px;display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:baseline}
+.sum .lbl{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);font-weight:700}
+.sum .total{font-family:var(--f-display);font-weight:900;font-size:3rem;line-height:1;font-variant-numeric:tabular-nums}
+.sum .time{grid-column:1/-1;color:var(--ink-2);font-size:.9rem}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
+.fields label{display:grid;gap:4px;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);font-weight:700;min-width:0}
+.fields select{
+  width:100%;appearance:none;-webkit-appearance:none;border:1.5px solid var(--rule);border-radius:10px;background:#fbf7ee;
+  padding:10px 30px 10px 12px;font:500 .92rem var(--f-body);color:var(--ink);color-scheme:light;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%236b6557' stroke-width='1.6'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 11px center;
+}
+.comanda .btn{width:100%;--b:#1f8a4c;color:#fff;font-size:1rem}
+.comanda .btn:hover{box-shadow:0 12px 26px -12px #1f8a4c}
+.comanda .btn[aria-disabled="true"]{opacity:.45;pointer-events:none}
+.comanda .fine{margin:12px 0 0;font-size:.78rem;color:var(--ink-2);line-height:1.45}
+@media (max-width:900px){.combo-grid{grid-template-columns:1fr}.comanda{position:relative;top:0}}
+@media (max-width:420px){.fields{grid-template-columns:1fr}}
+
+/* ---------- cuts ---------- */
+.cuts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.cut{
+  position:relative;border:1px solid var(--linha);border-radius:18px;background:var(--couro-2);
+  padding:20px 20px 22px;overflow:hidden;min-width:0;
+  transition:border-color .3s,transform .4s cubic-bezier(.2,.8,.2,1);
+}
+.cut:hover{border-color:color-mix(in srgb,var(--latao) 55%,var(--linha));transform:translateY(-4px)}
+.cut .art{aspect-ratio:16/11;display:grid;place-items:center;border-radius:12px;background:radial-gradient(120% 90% at 50% 20%,var(--couro-3),var(--couro) 70%);margin-bottom:18px;overflow:hidden}
+.cut .art svg{height:88%;width:auto;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.cut:hover .art svg{transform:rotate(-4deg) scale(1.04)}
+.cut h3{font-family:var(--f-display);font-weight:800;font-size:1.8rem;text-transform:uppercase;line-height:1}
+.cut p{margin:8px 0 16px;color:var(--nevoa);font-size:.93rem}
+.spec{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:.84rem;align-items:center}
+.spec dt{color:var(--nevoa)}
+.spec dd{margin:0;font-weight:600;font-variant-numeric:tabular-nums}
+.meter{height:6px;border-radius:6px;background:var(--linha);overflow:hidden}
+.meter i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--latao),var(--latao-claro));width:var(--w);transform-origin:left;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.cut:not(:hover) .meter i{transform:scaleX(.92)}
+@media (max-width:960px){.cuts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.cuts{grid-template-columns:1fr}}
+
+/* ---------- steps ---------- */
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;counter-reset:s;list-style:none;margin:0;padding:0}
+.steps li{position:relative;padding:28px 24px 0 0;border-top:1px solid var(--linha);min-width:0}
+.steps li::before{
+  counter-increment:s;content:"0" counter(s);
+  font-family:var(--f-display);font-weight:900;font-size:3.4rem;line-height:1;color:transparent;
+  -webkit-text-stroke:1.2px var(--latao);display:block;margin-bottom:14px;
+}
+.steps li::after{content:"";position:absolute;top:-4px;left:0;width:7px;height:7px;background:var(--latao);border-radius:50%}
+.steps h3{font-size:1.15rem;font-weight:700;margin-bottom:6px}
+.steps p{margin:0;color:var(--nevoa);font-size:.94rem}
+@media (max-width:860px){.steps{grid-template-columns:1fr 1fr;row-gap:36px}}
+@media (max-width:520px){.steps{grid-template-columns:1fr}}
+
+/* ---------- club ---------- */
+.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch}
+.plan{display:flex;flex-direction:column;gap:18px;border:1px solid var(--linha);border-radius:20px;padding:28px 26px;background:var(--couro);min-width:0;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.plan:hover{transform:translateY(-4px)}
+.plan.best{background:var(--marfim);color:#1c1a15;border-color:var(--marfim)}
+.plan.best .muted,.plan.best li{color:#5d584c}
+.plan.best .per{color:#5d584c}
+.plan header{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.plan h3{font-family:var(--f-display);font-weight:800;font-size:1.7rem;text-transform:uppercase;line-height:1}
+.plan .badge{font:700 .66rem/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;padding:6px 9px;border-radius:6px;background:#1c1a15;color:var(--marfim)}
+.plan .amount{font-family:var(--f-display);font-weight:900;font-size:3.6rem;line-height:.9;font-variant-numeric:tabular-nums}
+.plan .amount small{font-size:1.2rem;font-weight:800;vertical-align:top;margin-right:4px}
+.plan .per{font-size:.9rem;color:var(--nevoa);font-weight:500;margin-top:4px}
+.plan ul{list-style:none;margin:0;padding:0;display:grid;gap:10px;flex:1}
+.plan li{display:flex;gap:10px;color:var(--nevoa);font-size:.95rem;line-height:1.4}
+.plan li svg{width:18px;height:18px;flex:none;color:var(--latao);margin-top:1px}
+.plan.best li svg{color:#8a6a2c}
+.plan.best .btn{--b:#1c1a15;color:var(--marfim)}
+.plan .btn{width:100%}
+@media (max-width:900px){.plans{grid-template-columns:1fr}}
+
+/* ---------- team ---------- */
+.team{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.barber{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;padding:22px;border:1px solid var(--linha);border-radius:18px;min-width:0}
+.mono{width:76px;height:76px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-serif);font-style:italic;font-size:2.1rem;color:var(--couro);background:conic-gradient(from 200deg,var(--latao-claro),var(--latao),#8a6a2c,var(--latao-claro));position:relative}
+.mono::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px dashed color-mix(in srgb,var(--latao) 60%,transparent);animation:spin 24s linear infinite}
+.barber h3{font-size:1.15rem;font-weight:700}
+.barber p{margin:2px 0 0;color:var(--nevoa);font-size:.9rem;line-height:1.4}
+@media (max-width:960px){.team{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.team{grid-template-columns:1fr}}
+
+/* ---------- faq ---------- */
+.faq-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(28px,5vw,72px)}
+.faq details{border-bottom:1px solid var(--linha)}
+.faq details:first-child{border-top:1px solid var(--linha)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 0;font-weight:600;font-size:1.08rem}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary i{width:28px;height:28px;border:1px solid var(--linha);border-radius:50%;flex:none;position:relative;transition:transform .35s,border-color .3s}
+.faq summary i::before,.faq summary i::after{content:"";position:absolute;left:50%;top:50%;width:11px;height:1.5px;background:var(--latao);transform:translate(-50%,-50%)}
+.faq summary i::after{transform:translate(-50%,-50%) rotate(90deg);transition:transform .35s}
+.faq details[open] summary i{transform:rotate(180deg);border-color:var(--latao)}
+.faq details[open] summary i::after{transform:translate(-50%,-50%) rotate(0)}
+.faq details p{margin:0 0 22px;color:var(--nevoa);max-width:62ch}
+@media (max-width:860px){.faq-grid{grid-template-columns:1fr}}
+
+/* ---------- visit ---------- */
+.visit{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.card{border:1px solid var(--linha);border-radius:20px;padding:28px;background:var(--couro-2);min-width:0}
+.hours{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;margin-top:14px}
+.hours td{padding:11px 0;border-bottom:1px solid var(--linha)}
+.hours td:last-child{text-align:right}
+.hours tr.today td{color:var(--latao-claro);font-weight:700}
+.hours tr.today td:first-child::after{content:"hoje";margin-left:10px;font:700 .62rem/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;padding:4px 7px;border-radius:5px;background:var(--latao);color:var(--couro);vertical-align:2px}
+.addr{font-family:var(--f-display);font-weight:800;font-size:1.9rem;text-transform:uppercase;line-height:1.05;margin:6px 0 4px}
+.map{margin-top:18px;border-radius:14px;overflow:hidden;border:1px solid var(--linha);background:var(--couro)}
+.map svg{display:block;width:100%;height:auto}
+.pulse{animation:pulse 2.4s ease-out infinite;transform-origin:center;transform-box:fill-box}
+@keyframes pulse{from{transform:scale(.4);opacity:.8}to{transform:scale(2.6);opacity:0}}
+.contact-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+@media (max-width:860px){.visit{grid-template-columns:1fr}}
+
+/* ---------- footer ---------- */
+.foot{padding-block:clamp(56px,8vw,96px) 32px;border-top:1px solid var(--linha);overflow:hidden}
+.bigword{font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:clamp(4.5rem,21vw,17rem);line-height:.8;letter-spacing:.04em;color:transparent;-webkit-text-stroke:1.2px color-mix(in srgb,var(--latao) 55%,transparent);margin:0;white-space:nowrap;text-align:center}
+.credit{display:flex;flex-wrap:wrap;justify-content:space-between;gap:18px 32px;margin-top:40px;padding-top:24px;border-top:1px solid var(--linha);color:var(--nevoa);font-size:.9rem}
+.credit p{margin:0;max-width:60ch}
+.credit strong{color:var(--marfim)}
+.credit nav{display:flex;gap:18px;flex-wrap:wrap}
+.credit a{color:var(--latao-claro);text-underline-offset:3px}
+
+/* scroll-driven entrance: transform only, content stays visible at rest */
+@supports (animation-timeline:view()){
+  .reveal{animation:lift linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
+  @keyframes lift{from{transform:translateY(40px) scale(.985)}to{transform:none}}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  html{scroll-behavior:auto}
+  .reveal{animation:none!important}
+}
+</style>
+
+</head>
+<body>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<header class="top" id="top">
+  <div class="wrap">
+    <a class="logo" href="#inicio" aria-label="Ofício Barbearia, início">
+      <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <circle cx="20" cy="20" r="18.5" stroke="#cfa65a" stroke-width="1.5"/>
+        <path d="M11 26.5 25.5 12a2.6 2.6 0 0 1 3.7 3.7L14.7 30.2z" fill="#cfa65a"/>
+        <path d="M14.7 30.2 11 26.5l-2.2 4.9z" fill="#ecd08f"/>
+        <circle cx="27.3" cy="13.9" r="1.1" fill="#101a16"/>
+      </svg>
+      <span><b>OFÍCIO</b><i>barbearia · Santo André</i></span>
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="#precos">Preços</a>
+      <a href="#combo">Monte seu horário</a>
+      <a href="#cortes">Cortes</a>
+      <a href="#clube">Clube</a>
+      <a href="#visita">Como chegar</a>
+    </nav>
+    <a class="btn" href="#combo">Agendar</a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileNav"><span></span><span></span><span></span><span class="sr">Abrir menu</span></button>
+  </div>
+  <nav class="mobile-nav" id="mobileNav" aria-label="Menu" hidden>
+    <a href="#precos">Preços</a>
+    <a href="#combo">Monte seu horário</a>
+    <a href="#cortes">Cortes</a>
+    <a href="#clube">Clube</a>
+    <a href="#visita">Como chegar</a>
+    <a class="btn" href="#combo">Agendar horário</a>
+  </nav>
+</header>
+
+<main id="inicio">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <p class="kicker"><span class="status" id="status"><span class="dot"></span><span id="statusText">Seg a sáb, 9h às 21h</span></span> Centro · Santo André, SP</p>
+        <h1 class="h1">
+          <span class="line"><span>Na régua,</span></span>
+          <span class="line"><span>sem fila.</span></span>
+          <span class="line"><span><em>do jeito que você pediu.</em></span></span>
+        </h1>
+        <p class="lead">Degradê, navalhado e barba na toalha quente, com hora marcada. Você monta o atendimento aqui, manda pelo WhatsApp e chega na hora certa.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#combo">Montar meu horário
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 10h11m-4-5 5 5-5 5"/></svg></a>
+          <a class="btn ghost" href="#precos">Ver tabela de preços</a>
+        </div>
+        <dl class="facts">
+          <div><dt>Hora marcada</dt><dd>Chegou, sentou. Sem esperar na fila.</dd></div>
+          <div><dt>Toalha quente</dt><dd>Em toda barba, com navalha descartável.</dd></div>
+          <div><dt>Pix e cartão</dt><dd>Débito, crédito ou Pix na hora.</dd></div>
+        </dl>
+      </div>
+
+      <div class="pole-stage" aria-hidden="true">
+        <svg class="ring" viewBox="0 0 300 300">
+          <defs><path id="circ" d="M150,150 m-128,0 a128,128 0 1,1 256,0 a128,128 0 1,1 -256,0"/></defs>
+          <circle cx="150" cy="150" r="142" fill="none" stroke="#2a4037"/>
+          <text><textPath href="#circ">Hora marcada · Degradê · Navalha · Toalha quente · Barba · Ofício ·</textPath></text>
+        </svg>
+        <div class="pole">
+          <div class="cap"></div>
+          <div class="tube"><div class="stripes"><i></i></div></div>
+          <div class="cap bottom"></div>
+        </div>
+        <div class="chip a">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="18" r="3"/><circle cx="18" cy="18" r="3"/><path d="M8.2 16 19 4M15.8 16 5 4"/></svg>
+          <span><b>Degradê R$ 50</b><small>45 min na cadeira</small></span>
+        </div>
+        <div class="chip b">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7c3-3 13-3 16 0M4 12c3-3 13-3 16 0M4 17c3-3 13-3 16 0"/></svg>
+          <span><b>Combo −R$ 10</b><small>cabelo + barba juntos</small></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker-clip"><div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <ul><li>Low fade</li><li>Navalhado</li><li>Taper</li><li>Barba terapia</li><li>Pigmentação</li><li>Platinado</li><li>Sobrancelha na navalha</li><li>Mid fade</li><li>Luzes</li></ul>
+      <ul><li>Low fade</li><li>Navalhado</li><li>Taper</li><li>Barba terapia</li><li>Pigmentação</li><li>Platinado</li><li>Sobrancelha na navalha</li><li>Mid fade</li><li>Luzes</li></ul>
+    </div>
+  </div></div>
+
+  <section class="section" id="precos">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow"><svg viewBox="0 0 22 10" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 5h14M15 1.5l6 3.5-6 3.5z"/></svg>Tabela de preços</p>
+          <h2 class="h2">Preço na parede, <em>sem surpresa</em> no caixa.</h2>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Categorias de serviço" id="tabs"></div>
+      </div>
+      <div id="boards"></div>
+      <p class="board-note">Tempo médio na cadeira. Valores de referência do projeto.</p>
+    </div>
+  </section>
+
+  <section class="section combo" id="combo">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow"><svg viewBox="0 0 22 10" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 5h14M15 1.5l6 3.5-6 3.5z"/></svg>Monte seu horário</p>
+          <h2 class="h2">Escolha o serviço, <em>a comanda</em> faz a conta.</h2>
+          <p class="lead">Marque o que você quer. O total e o tempo aparecem na hora, e a mensagem vai pronta para o WhatsApp.</p>
+        </div>
+      </div>
+      <div class="combo-grid">
+        <div class="groups" id="groups"></div>
+        <aside class="comanda" aria-live="polite" aria-label="Resumo do agendamento">
+          <header><b>Comanda</b><span id="comandaNo">Nº 0412</span></header>
+          <ul class="lines" id="lines"></ul>
+          <div class="sum">
+            <span class="lbl">Total estimado</span>
+            <span class="total" id="total">R$ 0</span>
+            <span class="time" id="time">0 min na cadeira</span>
+          </div>
+          <div class="fields">
+            <label for="barbeiro">Barbeiro
+              <select id="barbeiro">
+                <option>Tanto faz</option>
+                <option>Rafa Duarte</option>
+                <option>Léo Santana</option>
+                <option>Bia Moraes</option>
+              </select>
+            </label>
+            <label for="periodo">Período
+              <select id="periodo">
+                <option>Manhã</option>
+                <option selected>Tarde</option>
+                <option>Noite</option>
+              </select>
+            </label>
+          </div>
+          <a class="btn" id="wa" href="#" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3a.5.5 0 0 0 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.2-.2-.2-.5-.4Z"/></svg>
+            Enviar pelo WhatsApp
+          </a>
+          <p class="fine">Abre o WhatsApp com a mensagem pronta. No site de um cliente real, o botão vai direto para o número da barbearia.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="cortes">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow"><svg viewBox="0 0 22 10" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 5h14M15 1.5l6 3.5-6 3.5z"/></svg>Cortes em alta</p>
+          <h2 class="h2">Os que mais <em>saem da cadeira</em>.</h2>
+        </div>
+        <p class="lead" style="margin:0;max-width:38ch">O número do pente diz o quanto de cabelo fica. Pente 0 é pele, pente 3 deixa uns 9 mm.</p>
+      </div>
+      <div class="cuts" id="cuts"></div>
+    </div>
+  </section>
+
+  <section class="section" id="atendimento" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow"><svg viewBox="0 0 22 10" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 5h14M15 1.5l6 3.5-6 3.5z"/></svg>Como é o atendimento</p>
+          <h2 class="h2">Do agendamento <em>à toalha quente</em>.</h2>
+        </div>
+      </div>
+      <ol class="steps reveal">
+        <li><h3>Você agenda</h3><p>Monta o serviço aqui no site e confirma o horário pelo WhatsApp.</p></li>
+        <li><h3>A conversa</h3><p>Antes da máquina, o barbeiro olha o formato do rosto, o redemoinho e a sua rotina.</p></li>
+        <li><h3>Máquina, tesoura e navalha</h3><p>Degradê no pente certo, acabamento na navalha e o risco se você pedir.</p></li>
+        <li><h3>Toalha quente e finalização</h3><p>Barba com toalha quente, pomada ou pó modelador, e o espelho de mão para conferir.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section combo" id="clube">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow"><svg viewBox="0 0 22 10" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 5h14M15 1.5l6 3.5-6 3.5z"/></svg>Clube Ofício</p>
+          <h2 class="h2">Assinatura mensal, <em>corte sempre em dia</em>.</h2>
+        </div>
+        <p class="lead" style="margin:0;max-width:40ch">Quem faz degradê volta a cada 15 dias. No clube, o retoque já está pago.</p>
+      </div>
+      <div class="plans">
+        <article class="plan reveal">
+          <header><h3>Corte</h3></header>
+          <div><div class="amount"><small>R$</small>99</div><div class="per">por mês</div></div>
+          <ul>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 10.5 4 4 8-9"/></svg>Cortes ilimitados de segunda a quinta</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 10.5 4 4 8-9"/></svg>Acabamento no pezinho quando quiser</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 10.5 4 4 8-9"/></svg>Agendamento com prioridade</li>
+          </ul>
+          <a class="btn ghost" data-plan="Corte (R$ 99/mês)" href="#" target="_blank" rel="noopener">Quero esse plano</a>
+        </article>
+        <article class="plan best reveal">
+          <header><h3>Corte + Barba</h3><span class="badge">Recomendado</span></header>
+          <div><div class="amount"><small>R$</small>159</div><div class="per">por mês</div></div>
+          <ul>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 10.5 4 4 8-9"/></svg>Cortes e barbas ilimitados de segunda a quinta</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 10.5 4 4 8-9"/></svg>Toalha quente em toda barba</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 10.5 4 4 8-9"/></svg>10% off em química e produtos</li>
+          </ul>
+          <a class="btn" data-plan="Corte + Barba (R$ 159/mês)" href="#" target="_blank" rel="noopener">Quero esse plano</a>
+        </article>
+        <article class="plan reveal">
+          <header><h3>Completo</h3></header>
+          <div><div class="amount"><small>R$</small>199</div><div class="per">por mês</div></div>
+          <ul>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 10.5 4 4 8-9"/></svg>Corte e barba ilimitados, qualquer dia</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 10.5 4 4 8-9"/></svg>Sobrancelha e hidratação inclusas</li>
+            <li><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 10.5 4 4 8-9"/></svg>Sábado liberado, o dia mais disputado</li>
+          </ul>
+          <a class="btn ghost" data-plan="Completo (R$ 199/mês)" href="#" target="_blank" rel="noopener">Quero esse plano</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="equipe">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow"><svg viewBox="0 0 22 10" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 5h14M15 1.5l6 3.5-6 3.5z"/></svg>Quem atende</p>
+          <h2 class="h2">Três cadeiras, <em>três especialistas</em>.</h2>
+        </div>
+      </div>
+      <div class="team">
+        <article class="barber reveal"><div class="mono">R</div><div><h3>Rafa Duarte</h3><p>Degradê e navalhado. O cara do low fade na pele.</p></div></article>
+        <article class="barber reveal"><div class="mono">L</div><div><h3>Léo Santana</h3><p>Barba, toalha quente e desenho de contorno.</p></div></article>
+        <article class="barber reveal"><div class="mono">B</div><div><h3>Bia Moraes</h3><p>Platinado, luzes e química sem estragar o fio.</p></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section faq" id="duvidas" style="padding-top:0">
+    <div class="wrap faq-grid">
+      <div class="reveal">
+        <p class="eyebrow"><svg viewBox="0 0 22 10" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 5h14M15 1.5l6 3.5-6 3.5z"/></svg>Dúvidas</p>
+        <h2 class="h2">Pergunta <em>de cadeira</em>.</h2>
+      </div>
+      <div>
+        <details open><summary>Preciso agendar ou posso chegar?<i></i></summary><p>Pode chegar, mas quem agendou tem prioridade. No sábado, só com horário marcado.</p></details>
+        <details><summary>De quanto em quanto tempo refaço o degradê?<i></i></summary><p>O degradê na pele começa a perder o desenho em uns 15 dias. Corte social aguenta de 3 a 4 semanas.</p></details>
+        <details><summary>Quais formas de pagamento vocês aceitam?<i></i></summary><p>Pix, débito e crédito. Os planos do clube são cobrados no cartão todo mês.</p></details>
+        <details><summary>Atendem criança?<i></i></summary><p>Sim, a partir de 2 anos. O corte infantil vai até 10 anos, e a gente tem cadeirinha.</p></details>
+        <details><summary>E se eu atrasar?<i></i></summary><p>Seguramos o horário por 10 minutos. Depois disso, encaixamos no próximo horário livre.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="visita" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <p class="eyebrow"><svg viewBox="0 0 22 10" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 5h14M15 1.5l6 3.5-6 3.5z"/></svg>Como chegar</p>
+          <h2 class="h2">Horários e <em>endereço</em>.</h2>
+        </div>
+      </div>
+      <div class="visit">
+        <div class="card reveal">
+          <p class="eyebrow" style="margin:0">Horário de funcionamento</p>
+          <table class="hours" id="hours"><tbody></tbody></table>
+        </div>
+        <div class="card reveal">
+          <p class="eyebrow" style="margin:0">Endereço</p>
+          <p class="addr">Rua do Ofício, 120</p>
+          <p style="margin:0;color:var(--nevoa)">Centro · Santo André, SP · endereço de exemplo</p>
+          <div class="map" aria-hidden="true">
+            <svg viewBox="0 0 400 190">
+              <rect width="400" height="190" fill="#101a16"/>
+              <g fill="#16241e">
+                <rect x="14" y="14" width="96" height="56" rx="4"/><rect x="124" y="14" width="120" height="56" rx="4"/><rect x="258" y="14" width="128" height="56" rx="4"/>
+                <rect x="14" y="86" width="96" height="42" rx="4"/><rect x="258" y="86" width="60" height="42" rx="4"/><rect x="332" y="86" width="54" height="42" rx="4"/>
+                <rect x="14" y="144" width="150" height="34" rx="4"/><rect x="178" y="144" width="208" height="34" rx="4"/>
+              </g>
+              <rect x="124" y="86" width="120" height="42" rx="4" fill="#1d3a2b"/>
+              <text x="184" y="111" text-anchor="middle" font-family="Hanken Grotesk,sans-serif" font-size="10" fill="#7fcf95" opacity=".8">Praça</text>
+              <g stroke="#2a4037" stroke-width="2" fill="none">
+                <path d="M0 78h400M0 136h400M117 0v190M251 0v190M325 78v58"/>
+              </g>
+              <path d="M0 136h400" stroke="#cfa65a" stroke-width="3" stroke-dasharray="1 0"/>
+              <text x="30" y="132" font-family="Hanken Grotesk,sans-serif" font-size="9.5" fill="#cfa65a" letter-spacing="1.5">RUA DO OFÍCIO</text>
+              <circle class="pulse" cx="290" cy="136" r="9" fill="#cfa65a"/>
+              <circle cx="290" cy="136" r="6.5" fill="#ecd08f" stroke="#101a16" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="contact-actions">
+            <a class="btn" href="#combo">Agendar horário</a>
+            <a class="btn ghost" href="https://www.google.com/maps/search/?api=1&query=Centro%2C%20Santo%20Andr%C3%A9%20SP" target="_blank" rel="noopener">Abrir no mapa</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p class="bigword" aria-hidden="true">Ofício</p>
+    <div class="credit">
+      <p><strong>Projeto de portfólio com marca fictícia.</strong> Site criado por Matheus Gomes, com apoio de IA. Quer um site assim para o seu negócio? Me chama no LinkedIn.</p>
+      <nav aria-label="Contato do desenvolvedor">
+        <a href="https://github.com/matheusfargomes-beep" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/matheus-gomes-916330354/" target="_blank" rel="noopener">LinkedIn</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  const $ = (s, r=document) => r.querySelector(s);
+
+  /* ---------- data ---------- */
+  const CATS = [
+    {id:"cabelo", label:"Cabelo", excl:true, items:[
+      {id:"corte", name:"Corte social", min:40, price:45, desc:"Tesoura e máquina, lavagem e finalização com pomada."},
+      {id:"degrade", name:"Degradê", min:45, price:50, desc:"Low, mid ou high fade, do pente 0 ao 3. Acabamento na navalha.", tag:"Mais pedido"},
+      {id:"navalhado", name:"Navalhado", min:50, price:55, desc:"Laterais na pele com navalha, para quem gosta do corte bem limpo."},
+      {id:"infantil", name:"Infantil", min:35, price:40, desc:"Até 10 anos, com cadeirinha e paciência."}
+    ]},
+    {id:"barba", label:"Barba", items:[
+      {id:"barba", name:"Barba", min:30, price:35, desc:"Máquina e navalha, contorno desenhado e balm.", excl:"b"},
+      {id:"terapia", name:"Barba terapia", min:40, price:45, desc:"Toalha quente, óleo pré-barba, navalha e máscara facial.", tag:"Toalha quente", excl:"b"},
+      {id:"sobrancelha", name:"Sobrancelha", min:10, price:15, desc:"Limpeza na navalha, sem afinar demais."},
+      {id:"pigmentacao", name:"Pigmentação", min:20, price:30, desc:"Preenche falhas da barba e do degradê. Dura até 5 dias."}
+    ]},
+    {id:"quimica", label:"Química e extras", items:[
+      {id:"platinado", name:"Platinado", min:120, price:150, desc:"Descoloração global com matização. Inclui teste de mecha."},
+      {id:"luzes", name:"Luzes", min:90, price:110, desc:"Mechas na touca ou no papel, do jeito discreto ao chamativo."},
+      {id:"hidratacao", name:"Hidratação", min:20, price:30, desc:"Para cabelo que passou por química ou sol."}
+    ]}
+  ];
+  const ALL = CATS.flatMap(c => c.items.map(i => ({...i, cat:c.id})));
+  const COMBO_DISCOUNT = 10;
+  const fmtMin = m => m < 60 ? m + " min" : Math.floor(m/60) + "h" + (m%60 ? String(m%60).padStart(2,"0") : "");
+  const brl = n => "R$ " + n.toLocaleString("pt-BR");
+  const check = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m3 8.5 3 3 7-7"/></svg>';
+
+  /* ---------- price board ---------- */
+  const tabs = $("#tabs"), boards = $("#boards");
+  CATS.forEach((c, i) => {
+    const t = document.createElement("button");
+    t.className = "tab"; t.type = "button"; t.role = "tab"; t.id = "tab-" + c.id;
+    t.setAttribute("aria-controls", "board-" + c.id);
+    t.setAttribute("aria-selected", i === 0 ? "true" : "false");
+    t.tabIndex = i === 0 ? 0 : -1;
+    t.textContent = c.label;
+    tabs.appendChild(t);
+
+    const b = document.createElement("div");
+    b.className = "board"; b.id = "board-" + c.id; b.role = "tabpanel";
+    b.setAttribute("aria-labelledby", t.id); b.hidden = i !== 0;
+    b.innerHTML = c.items.map(it => `
+      <div class="row">
+        <h3>${it.name}${it.tag ? `<span class="tag">${it.tag}</span>` : ""}</h3>
+        <span class="min">${fmtMin(it.min)}</span>
+        <span class="price"><small>R$</small>${it.price}</span>
+        <p>${it.desc}</p>
+      </div>`).join("");
+    boards.appendChild(b);
+  });
+  function selectTab(t){
+    tabs.querySelectorAll(".tab").forEach(x => {
+      const on = x === t;
+      x.setAttribute("aria-selected", on); x.tabIndex = on ? 0 : -1;
+      const panel = document.getElementById(x.getAttribute("aria-controls"));
+      panel.hidden = !on;
+      if (on) panel.querySelectorAll(".row").forEach((r, k) => { r.style.animation = "none"; r.offsetWidth; r.style.animation = `ink .45s ${k*60}ms both`; });
+    });
+  }
+  tabs.addEventListener("click", e => { const t = e.target.closest(".tab"); if (t) selectTab(t); });
+  tabs.addEventListener("keydown", e => {
+    if (!["ArrowLeft","ArrowRight"].includes(e.key)) return;
+    const list = [...tabs.querySelectorAll(".tab")], i = list.indexOf(document.activeElement);
+    const n = list[(i + (e.key === "ArrowRight" ? 1 : -1) + list.length) % list.length];
+    n.focus(); selectTab(n);
+  });
+
+  /* ---------- combo builder ---------- */
+  const groups = $("#groups");
+  const hints = {cabelo:"escolha um", barba:"barba ou barba terapia, mais extras", quimica:"opcional"};
+  groups.innerHTML = CATS.map(c => `
+    <fieldset class="group" style="border:0;margin:0;padding:0;min-width:0">
+      <legend class="sr">${c.label}</legend>
+      <h3 aria-hidden="true">${c.label} <span>${hints[c.id]}</span></h3>
+      <div class="opts">
+        ${c.items.map(it => `
+          <label class="opt">
+            <input type="checkbox" id="opt-${it.id}" value="${it.id}" data-cat="${c.id}" ${c.excl ? 'data-excl="' + c.id + '"' : it.excl ? 'data-excl="' + it.excl + '"' : ""}>
+            <span class="box">
+              <span class="check">${check}</span>
+              <span class="name">${it.name}<small>${fmtMin(it.min)}</small></span>
+              <span class="val">${it.price}</span>
+            </span>
+          </label>`).join("")}
+      </div>
+    </fieldset>`).join("");
+
+  ["degrade","barba"].forEach(id => { $("#opt-" + id).checked = true; });
+
+  const lines = $("#lines"), totalEl = $("#total"), timeEl = $("#time"), wa = $("#wa");
+  let shown = 0, raf = 0;
+  function tween(to){
+    cancelAnimationFrame(raf);
+    const from = shown, t0 = performance.now(), d = 450;
+    const step = now => {
+      const p = Math.min(1, (now - t0) / d), e = 1 - Math.pow(1 - p, 3);
+      shown = Math.round(from + (to - from) * e);
+      totalEl.textContent = brl(shown);
+      if (p < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+  }
+  function update(){
+    const picked = ALL.filter(it => $("#opt-" + it.id).checked);
+    const hasHair = picked.some(p => p.cat === "cabelo");
+    const hasBeard = picked.some(p => p.id === "barba" || p.id === "terapia");
+    const disc = hasHair && hasBeard ? COMBO_DISCOUNT : 0;
+    const total = picked.reduce((s, p) => s + p.price, 0) - disc;
+    const mins = picked.reduce((s, p) => s + p.min, 0);
+
+    lines.innerHTML = picked.length
+      ? picked.map(p => `<li><span>${p.name}</span><span>${brl(p.price)}</span></li>`).join("") +
+        (disc ? `<li class="disc"><span>Combo cabelo + barba</span><span>− ${brl(disc)}</span></li>` : "")
+      : `<li class="empty"><span>Marque pelo menos um serviço.</span></li>`;
+    tween(total);
+    timeEl.textContent = picked.length ? `${fmtMin(mins)} na cadeira` : "Nenhum serviço marcado";
+
+    const msg = [
+      "Olá! Quero agendar na Ofício Barbearia.",
+      "Serviços: " + picked.map(p => p.name).join(", ") + ".",
+      `Total estimado: ${brl(total)} (${fmtMin(mins)}).`,
+      "Barbeiro: " + $("#barbeiro").value + ". Período: " + $("#periodo").value.toLowerCase() + "."
+    ].join("\n");
+    wa.href = "https://wa.me/?text=" + encodeURIComponent(msg);
+    wa.setAttribute("aria-disabled", picked.length ? "false" : "true");
+  }
+  groups.addEventListener("change", e => {
+    const inp = e.target;
+    if (inp.checked && inp.dataset.excl) {
+      groups.querySelectorAll(`input[data-excl="${inp.dataset.excl}"]`).forEach(o => { if (o !== inp) o.checked = false; });
+    }
+    update();
+  });
+  $("#barbeiro").addEventListener("change", update);
+  $("#periodo").addEventListener("change", update);
+  $("#comandaNo").textContent = "Nº " + String(new Date().getDate()).padStart(2,"0") + String(new Date().getMonth()+1).padStart(2,"0");
+  update();
+
+  document.querySelectorAll("[data-plan]").forEach(a => {
+    a.href = "https://wa.me/?text=" + encodeURIComponent(`Olá! Quero saber mais sobre o Clube Ofício, plano ${a.dataset.plan}.`);
+  });
+
+  /* ---------- cuts wall (SVG heads) ---------- */
+  const CUTS = [
+    {name:"Low fade", pente:"0 → 2", altura:"Baixa", w:30, vol:10, ft:92, fb:112, desc:"Degradê que começa rente à orelha. Discreto, vai bem no trabalho."},
+    {name:"Mid fade", pente:"0 → 3", altura:"Média", w:58, vol:12, ft:78, fb:100, desc:"Sobe até a altura da têmpora. O meio-termo mais pedido."},
+    {name:"High fade", pente:"0 → 3", altura:"Alta", w:86, vol:14, ft:62, fb:86, desc:"Laterais na pele quase até o topo. Contraste forte com o volume."},
+    {name:"Taper", pente:"1 → 3", altura:"Só nuca e costeleta", w:18, vol:12, ft:104, fb:124, desc:"Afina só as pontas. Parece que o cabelo cresceu arrumado."},
+    {name:"Buzz cut", pente:"1 no geral", altura:"Uniforme", w:100, vol:2, ft:84, fb:92, op:.7, desc:"Máquina em tudo, no mesmo pente. Zero trabalho de manhã."},
+    {name:"Crop francês", pente:"0 → 2 + franja", altura:"Média", w:58, vol:9, ft:80, fb:102, fringe:true, desc:"Topo texturizado com franja reta curta. Tendência forte de 2026."}
+  ];
+  function head(c, i){
+    const id = "h" + i, top = 36;
+    const v = c.vol;
+    const cs = Math.max(64, Math.min(80, c.ft + 4));
+    const cap = `M36,${cs} C34,${top-v+18} 54,${top-v} 80,${top-v} C106,${top-v} 126,${top-v+18} 124,${cs} C114,${cs-10} 100,59 80,59 C60,59 46,${cs-10} 36,${cs}Z`;
+    const fringe = c.fringe ? `<path d="M44,70 C58,60 102,60 116,70 L112,80 L104,76 L96,81 L88,76 L80,81 L72,76 L64,81 L56,76 L48,80Z" fill="#cfa65a"/>` : "";
+    return `<svg viewBox="0 0 160 176" role="img" aria-label="Ilustração do corte ${c.name}">
+      <defs>
+        <clipPath id="${id}c"><ellipse cx="80" cy="88" rx="44" ry="54"/></clipPath>
+        <linearGradient id="${id}g" gradientUnits="userSpaceOnUse" x1="0" y1="${c.ft}" x2="0" y2="${c.fb}">
+          <stop offset="0" stop-color="#cfa65a" stop-opacity="${c.op || 1}"/>
+          <stop offset=".55" stop-color="#cfa65a" stop-opacity="${(c.op || 1) * .35}"/>
+          <stop offset="1" stop-color="#cfa65a" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="${id}x" gradientUnits="userSpaceOnUse" x1="36" y1="0" x2="124" y2="0">
+          <stop offset="0" stop-color="#fff"/><stop offset=".2" stop-color="#fff"/><stop offset=".34" stop-color="#000"/>
+          <stop offset=".66" stop-color="#000"/><stop offset=".8" stop-color="#fff"/><stop offset="1" stop-color="#fff"/>
+        </linearGradient>
+        <mask id="${id}m" maskUnits="userSpaceOnUse" x="0" y="0" width="160" height="176"><rect width="160" height="176" fill="url(#${id}x)"/></mask>
+        <pattern id="${id}p" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(70)"><path d="M0 0v4" stroke="#101a16" stroke-width="1" opacity=".35"/></pattern>
+      </defs>
+      <path d="M58,132 L54,168 M102,132 L106,168" stroke="#2a4037" stroke-width="2"/>
+      <path d="M14,176 C30,152 58,150 80,150 C102,150 130,152 146,176Z" fill="#1e3129"/>
+      <ellipse cx="34" cy="94" rx="8" ry="13" fill="#1e3129" stroke="#ecd08f" stroke-opacity=".35"/>
+      <ellipse cx="126" cy="94" rx="8" ry="13" fill="#1e3129" stroke="#ecd08f" stroke-opacity=".35"/>
+      <ellipse cx="80" cy="88" rx="44" ry="54" fill="#1e3129"/>
+      <g clip-path="url(#${id}c)" mask="url(#${id}m)"><rect x="0" y="40" width="160" height="${c.fb-40}" fill="url(#${id}g)"/></g>
+      <path d="${cap}" fill="#cfa65a"/>
+      <path d="${cap}" fill="url(#${id}p)"/>
+      ${fringe}
+      <ellipse cx="80" cy="88" rx="44" ry="54" fill="none" stroke="#ecd08f" stroke-opacity=".45" stroke-width="1.2"/>
+      <path d="M66,104 q14,6 28,0" stroke="#ecd08f" stroke-opacity=".25" fill="none" stroke-width="1.2"/>
+    </svg>`;
+  }
+  $("#cuts").innerHTML = CUTS.map((c, i) => `
+    <article class="cut reveal">
+      <div class="art">${head(c, i)}</div>
+      <h3>${c.name}</h3>
+      <p>${c.desc}</p>
+      <dl class="spec">
+        <dt>Pente</dt><dd>${c.pente}</dd>
+        <dt>Altura</dt><dd>${c.altura}</dd>
+        <dt class="sr">Nível da altura</dt><dd style="grid-column:1/-1"><div class="meter"><i style="--w:${c.w}%"></i></div></dd>
+      </dl>
+    </article>`).join("");
+
+  /* ---------- hours + open now (São Paulo time) ---------- */
+  const DAYS = ["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
+  const HOURS = {0:null,1:[9,21],2:[9,21],3:[9,21],4:[9,21],5:[9,21],6:[8,19]};
+  function spNow(){
+    try{
+      const parts = new Intl.DateTimeFormat("en-US",{timeZone:"America/Sao_Paulo",weekday:"short",hour:"numeric",minute:"numeric",hour12:false}).formatToParts(new Date());
+      const get = t => parts.find(p => p.type === t).value;
+      const wd = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].indexOf(get("weekday"));
+      return {wd, h:(+get("hour")) % 24, m:+get("minute")};
+    }catch(e){ const d = new Date(); return {wd:d.getDay(), h:d.getHours(), m:d.getMinutes()}; }
+  }
+  const now = spNow();
+  $("#hours tbody").innerHTML = [1,2,3,4,5,6,0].map(d => `
+    <tr class="${d === now.wd ? "today" : ""}"><td>${DAYS[d]}</td><td>${HOURS[d] ? HOURS[d][0] + "h às " + HOURS[d][1] + "h" : "Fechado"}</td></tr>`).join("");
+  (function status(){
+    const el = $("#status"), txt = $("#statusText");
+    const t = now.h + now.m/60, today = HOURS[now.wd];
+    if (today && t >= today[0] && t < today[1]) { el.classList.add("open"); txt.textContent = `Aberto agora · fecha às ${today[1]}h`; return; }
+    if (today && t < today[0]) { txt.textContent = `Fechado · abre hoje às ${today[0]}h`; return; }
+    for (let k = 1; k <= 7; k++) {
+      const d = (now.wd + k) % 7;
+      if (HOURS[d]) { txt.textContent = `Fechado · abre ${k === 1 ? "amanhã" : DAYS[d].toLowerCase()} às ${HOURS[d][0]}h`; return; }
+    }
+  })();
+
+  /* ---------- header, progress, menu ---------- */
+  const top = $("#top"), bar = $("#progress");
+  const onScroll = () => {
+    const y = window.scrollY, max = document.documentElement.scrollHeight - innerHeight;
+    top.classList.toggle("scrolled", y > 8);
+    bar.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+  };
+  addEventListener("scroll", onScroll, {passive:true}); onScroll();
+
+  const menuBtn = $("#menuBtn"), mnav = $("#mobileNav");
+  menuBtn.addEventListener("click", () => {
+    const open = menuBtn.getAttribute("aria-expanded") !== "true";
+    menuBtn.setAttribute("aria-expanded", open); mnav.hidden = !open;
+  });
+  mnav.addEventListener("click", e => { if (e.target.closest("a")) { menuBtn.setAttribute("aria-expanded", "false"); mnav.hidden = true; } });
+})();
+</script>
+
+</body>
+</html>
